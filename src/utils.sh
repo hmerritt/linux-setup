@@ -93,3 +93,24 @@ function wait_for_response
         sleep 1
     done
 }
+
+function fetch_install_deb
+{
+    local -r filename="${1}"
+    local -r requestURL="${2}"
+
+    wget "${requestURL}"
+    sudo dpkg -i "${filename}"
+}
+
+function fetch_install_binary
+{
+    setenv
+    local -r binname="${1}"
+    local -r filename="${2}"
+    local -r requestURL="${3}"
+
+    wget "${requestURL}"
+    sudo chmod +x "${filename}"
+    sudo mv -f "${filename}" "${dir_local_bin}/${binname}"
+}

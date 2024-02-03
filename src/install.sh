@@ -12,20 +12,24 @@ function install
 		bison \
 		curl \
 		gawk \
+		gcc \
 		git \
 		gpg \
 		htop \
 		libncurses5 \
 		lsb-release \
+		make \
 		net-tools \
 		rsync \
-		snapd \
 		software-properties-common \
 		tar \
 		unzip \
 		wget \
 		zip \
 		-y
+
+	sudo apt install snapd
+	sudo snap install core
 
 	# Personal
 	install_fspop
@@ -40,8 +44,10 @@ function install
 	install_jq
 	install_nodejs
 	install_golang
-	install_golang_programs
 	install_docker # Docker is last because it takes ages to install
+
+	# GUI
+	install_gui
 
 	# SSH
 	# $ ssh-keygen

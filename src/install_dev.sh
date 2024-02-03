@@ -18,6 +18,38 @@ function install_docker
     sudo service docker stop
 }
 
+function install_golang
+{
+	setenv
+    printsection "Installing Go-lang"
+
+	if command_exists go; then
+        command_exists_warning go
+    else
+        curl -OL https://golang.org/dl/go1.21.6.linux-amd64.tar.gz
+		tar -C /usr/local -xvf go1.21.6.linux-amd64.tar.gz
+		export GOROOT=/usr/local/go
+		export GOPATH=$HOME/go
+		mkdir -p $GOPATH/bin
+		echo "export GOROOT=/usr/local/go" >> ~/.bashrc
+		echo "export GOPATH=\$HOME/go" >> ~/.bashrc
+		echo "export PATH=\$PATH:/usr/local/go/bin:\$HOME/go/bin" >> ~/.bashrc
+		source ~/.bashrc
+	fi
+
+	refreshenv
+
+	if command_exists tinygo; then
+        command_exists_warning tinygo
+    else
+		wget https://github.com/tinygo-org/tinygo/releases/download/v0.30.0/tinygo_0.30.0_amd64.deb
+		sudo dpkg -i tinygo_0.30.0_amd64.deb
+	fi
+
+	go get github.com/jesseduffield/lazydocker
+	go install github.com/jesseduffield/lazydocker@latest
+}
+
 function install_jq
 {
 	setenv
@@ -55,32 +87,10 @@ function install_nodejs
 	fi
 }
 
-function install_golang
+function install_rust
 {
 	setenv
-    printsection "Installing Go-lang"
+    printsection "Installing Rust"
 
-	if command_exists go; then
-        command_exists_warning go
-    else
-        curl -OL https://golang.org/dl/go1.21.6.linux-amd64.tar.gz
-		tar -C /usr/local -xvf go1.21.6.linux-amd64.tar.gz
-		export GOROOT=/usr/local/go
-		export GOPATH=$HOME/go
-		mkdir -p $GOPATH/bin
-		echo "export GOROOT=/usr/local/go" >> ~/.bashrc
-		echo "export GOPATH=\$HOME/go" >> ~/.bashrc
-		echo "export PATH=\$PATH:/usr/local/go/bin:\$HOME/go/bin" >> ~/.bashrc
-		source ~/.bashrc
-	fi
-}
-
-function install_golang_programs
-{
-	setenv
-	refreshenv
-    printsection "Installing Go-lang programs"
-
-	go get github.com/jesseduffield/lazydocker
-	go install github.com/jesseduffield/lazydocker@latest
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 }

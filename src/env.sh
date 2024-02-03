@@ -6,6 +6,8 @@
 function setenv
 {
 	export version="0.1.1"
+
+    export dir_local_bin="/usr/local/bin"
 }
 
 function refreshenv
