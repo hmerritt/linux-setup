@@ -5,12 +5,12 @@
 # https://github.com/hmerritt/combine-script
 #
 # Metadata:
-#   | Compiled Timestamp | 1706971316       |
-#   | Compiled Date      | 2024-02-03 14:41 |
+#   | Compiled Timestamp | 1706974494       |
+#   | Compiled Date      | 2024-02-03 15:34 |
 #   | Combine.sh Version | 1.4.7            |
 #
 # Scripts Bundled:
-#  (5)  env.sh install.sh install_dev.sh main.sh utils.sh
+#  (6)  env.sh install.sh install_dev.sh install_gui.sh main.sh utils.sh
 #
 
 
@@ -177,6 +177,8 @@ function onfail
 function setenv
 {
 	export version="0.1.1"
+
+    export dir_local_bin="/usr/local/bin"
 }
 
 function refreshenv
@@ -209,20 +211,24 @@ function install
 		bison \
 		curl \
 		gawk \
+		gcc \
 		git \
 		gpg \
 		htop \
 		libncurses5 \
 		lsb-release \
+		make \
 		net-tools \
 		rsync \
-		snapd \
 		software-properties-common \
 		tar \
 		unzip \
 		wget \
 		zip \
 		-y
+
+	sudo apt install snapd
+	sudo snap install core
 
 	# Personal
 	install_fspop
@@ -237,8 +243,12 @@ function install
 	install_jq
 	install_nodejs
 	install_golang
-	install_golang_programs
+	install_rust
+	install_starship
 	install_docker # Docker is last because it takes ages to install
+
+	# GUI
+	install_gui
 
 	# SSH
 	# $ ssh-keygen
@@ -270,6 +280,38 @@ function install_docker
     sudo systemctl enable docker
     sudo systemctl stop docker
     sudo service docker stop
+}
+
+function install_golang
+{
+	setenv
+    printsection "Installing Go-lang"
+
+	if command_exists go; then
+        command_exists_warning go
+    else
+        curl -OL https://golang.org/dl/go1.21.6.linux-amd64.tar.gz
+		tar -C /usr/local -xvf go1.21.6.linux-amd64.tar.gz
+		export GOROOT=/usr/local/go
+		export GOPATH=$HOME/go
+		mkdir -p $GOPATH/bin
+		echo "export GOROOT=/usr/local/go" >> ~/.bashrc
+		echo "export GOPATH=\$HOME/go" >> ~/.bashrc
+		echo "export PATH=\$PATH:/usr/local/go/bin:\$HOME/go/bin" >> ~/.bashrc
+		source ~/.bashrc
+	fi
+
+	refreshenv
+
+	if command_exists tinygo; then
+        command_exists_warning tinygo
+    else
+		wget https://github.com/tinygo-org/tinygo/releases/download/v0.30.0/tinygo_0.30.0_amd64.deb
+		sudo dpkg -i tinygo_0.30.0_amd64.deb
+	fi
+
+	go get github.com/jesseduffield/lazydocker
+	go install github.com/jesseduffield/lazydocker@latest
 }
 
 function install_jq
@@ -309,34 +351,72 @@ function install_nodejs
 	fi
 }
 
-function install_golang
+function install_rust
 {
 	setenv
-    printsection "Installing Go-lang"
+    printsection "Installing Rust"
 
-	if command_exists go; then
-        command_exists_warning go
-    else
-        curl -OL https://golang.org/dl/go1.21.6.linux-amd64.tar.gz
-		tar -C /usr/local -xvf go1.21.6.linux-amd64.tar.gz
-		export GOROOT=/usr/local/go
-		export GOPATH=$HOME/go
-		mkdir -p $GOPATH/bin
-		echo "export GOROOT=/usr/local/go" >> ~/.bashrc
-		echo "export GOPATH=\$HOME/go" >> ~/.bashrc
-		echo "export PATH=\$PATH:/usr/local/go/bin:\$HOME/go/bin" >> ~/.bashrc
-		source ~/.bashrc
-	fi
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 }
 
-function install_golang_programs
+function install_starship
 {
 	setenv
-	refreshenv
-    printsection "Installing Go-lang programs"
+    printsection "Installing Starship.rs"
 
-	go get github.com/jesseduffield/lazydocker
-	go install github.com/jesseduffield/lazydocker@latest
+	curl -sS https://starship.rs/install.sh | sh
+	echo "eval \"\$(starship init bash)\"" >> ~/.bashrc
+}
+
+
+
+#
+# Script: install_gui.sh
+#
+
+
+
+function install_gui
+{
+	setenv
+    printsection "Installing GUI apps"
+
+	# essential
+	sudo apt install p7zip
+	sudo snap install p7zip-desktop
+	sudo snap install brave
+	sudo snap install mpv
+	sudo snap install notepad-plus-plus
+
+	# media
+	sudo snap install foobar2000
+	sudo snap install vlc
+	sudo snap install plex-desktop
+
+	# programming
+	sudo snap install android-studio --classic
+	sudo snap install beekeeper-studio # SQL editor
+	sudo snap install code --classic
+	sudo snap install gitkraken --classic
+
+	#  cli
+	sudo snap install yt-dlp
+	# fetch_install_binary "yt-dlp" "yt-dlp_linux" "https://github.com/yt-dlp/yt-dlp/releases/download/2023.12.30/yt-dlp_linux"
+	sudo apt install -y \
+		aria2 \
+		cloc \ 
+		composer \ 
+		ffmpeg \
+		git \ 
+		mediainfo \
+		flac
+
+	# misc
+	sudo snap install todoist
+	sudo snap install steam
+	sudo snap install audacity
+	sudo snap install blender --classic
+	fetch_install_deb "KeeWeb-1.18.7.linux.x64.deb" "https://github.com/keeweb/keeweb/releases/download/v1.18.7/KeeWeb-1.18.7.linux.x64.deb"
 }
 
 
@@ -453,6 +533,27 @@ function wait_for_response
         curl -sL ${requestURL} | grep -q "${requestResponse}" && break
         sleep 1
     done
+}
+
+function fetch_install_deb
+{
+    local -r filename="${1}"
+    local -r requestURL="${2}"
+
+    wget "${requestURL}"
+    sudo dpkg -i "${filename}"
+}
+
+function fetch_install_binary
+{
+    setenv
+    local -r binname="${1}"
+    local -r filename="${2}"
+    local -r requestURL="${3}"
+
+    wget "${requestURL}"
+    sudo chmod +x "${filename}"
+    sudo mv -f "${filename}" "${dir_local_bin}/${binname}"
 }
 
 
