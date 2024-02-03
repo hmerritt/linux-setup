@@ -1,6 +1,6 @@
-# Linux (GUI) Setup Script
+# Linux (Debian-based) Setup Script
 
-Linux setup script for fresh installs of GUI distros (e.g. Ubuntu, linux Mint, ect...).
+Debian setup script for fresh installs (e.g. Ubuntu, linux Mint, ect...).
 
 > If you use Windows, see [Win-Setup](https://github.com/hmerritt/win10-setup)
 
