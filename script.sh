@@ -5,12 +5,12 @@
 # https://github.com/hmerritt/combine-script
 #
 # Metadata:
-#   | Compiled Timestamp | 1706977381       |
-#   | Compiled Date      | 2024-02-03 16:23 |
+#   | Compiled Timestamp | 1706979039       |
+#   | Compiled Date      | 2024-02-03 16:50 |
 #   | Combine.sh Version | 1.4.7            |
 #
 # Scripts Bundled:
-#  (6)  env.sh install.sh install_dev.sh install_gui.sh main.sh utils.sh
+#  (7)  env.sh install.sh install_dev.sh install_gui.sh install_my.sh main.sh utils.sh
 #
 
 
@@ -176,7 +176,7 @@ function onfail
 #
 function setenv
 {
-	export version="0.5.20"
+	export version="0.5.30"
 
     export dir_local_bin="/usr/local/bin"
 }
@@ -382,6 +382,10 @@ function install_starship
 
 
 
+#
+# https://flathub.org
+#
+
 function install_gui
 {
 	setenv
@@ -401,8 +405,8 @@ function install_gui
 	# programming
 	flatpakget androidstudio com.google.AndroidStudio
 	flatpakget beekeeperstudio io.beekeeperstudio.Studio # SQL editor
-	flatpakget vscode com.visualstudio.code
 	flatpakget gitkraken com.axosoft.GitKraken
+	flatpakget vscode com.visualstudio.code
 
 	#  cli
 	fetch_install_binary "yt-dlp" "yt-dlp_linux" "https://github.com/yt-dlp/yt-dlp/releases/download/2023.12.30/yt-dlp_linux"
@@ -418,6 +422,7 @@ function install_gui
 	# misc
 	flatpakget audacity org.audacityteam.Audacity
 	flatpakget blender org.blender.Blender
+	flatpakget missioncenter io.missioncenter.MissionCenter
 	flatpakget obsidian md.obsidian.Obsidian
 	flatpakget pupgui2 net.davidotek.pupgui2 # Install and manage Wine/Proton
 	flatpakget slack com.slack.Slack
@@ -426,6 +431,89 @@ function install_gui
 	flatpakget xnconvert com.xnview.XnConvert
 
 	fetch_install_deb "KeeWeb-1.18.7.linux.x64.deb" "https://github.com/keeweb/keeweb/releases/download/v1.18.7/KeeWeb-1.18.7.linux.x64.deb"
+}
+
+
+
+#
+# Script: install_my.sh
+#
+
+
+
+function install_fspop
+{
+	setenv
+	printsection "fspop"
+
+	apt -qq install wget unzip
+
+	version="v1.3.6"
+	release_url="https://releases.mrrtt.me/fspop"
+
+	arch="amd64"
+
+	echo
+	echo "Downloading fspop from ${release_url}"
+	curl -L "${release_url}/${version}/fspop-${version}-linux_${arch}.zip" -o fspop.zip
+	onfail
+	echo
+
+	# Extract fspop release zip
+	unzip fspop.zip
+	onfail
+
+	rm fspop.zip
+
+	chmod +x fspop
+	mv -f fspop "${dir_local_bin}/fspop"
+
+	success "Success. fspop is good to go!"
+}
+
+function install_backup
+{
+	setenv
+	printsection "backup script"
+	curl -L https://github.com/hmerritt/backup-script/releases/download/v0.2.7/backup.sh -o backup.sh
+	onfail
+
+	chmod +x backup.sh
+	onfail
+	mv -f backup.sh "${dir_local_bin}/backup"
+	onfail
+
+	success "Success. backup script is good to go!"
+}
+
+function install_combine
+{
+	setenv
+	printsection "> combine script"
+	curl -L https://raw.githubusercontent.com/hmerritt/combine-script/master/src/combine.sh -o combine.sh
+	onfail
+
+	chmod +x combine.sh
+	onfail
+	mv -f combine.sh "${dir_local_bin}/combine"
+	onfail
+
+	success "Success. combine script is good to go!"
+}
+
+function install_esync
+{
+	setenv
+	printsection "> esync script"
+	curl -L https://github.com/hmerritt/esync-script/releases/download/v0.1.8/esync.sh -o esync.sh
+	onfail
+
+	chmod +x esync.sh
+	onfail
+	mv -f esync.sh "${dir_local_bin}/esync"
+	onfail
+
+	success "Success. esync script is good to go!"
 }
 
 
