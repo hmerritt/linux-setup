@@ -94,3 +94,12 @@ function install_rust
 
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 }
+
+function install_starship
+{
+	setenv
+    printsection "Installing Starship.rs"
+
+	curl -sS https://starship.rs/install.sh | sh
+	echo "eval \"\$(starship init bash)\"" >> ~/.bashrc
+}

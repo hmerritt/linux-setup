@@ -44,6 +44,8 @@ function install
 	install_jq
 	install_nodejs
 	install_golang
+	install_rust
+	install_starship
 	install_docker # Docker is last because it takes ages to install
 
 	# GUI
