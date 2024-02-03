@@ -6,9 +6,9 @@ function install
 	version
 
 	printsection "Performing System Updates"
-	apt update -y
-	apt upgrade -y
-	apt install \
+	sudo apt update -y
+	sudo apt upgrade -y
+	sudo apt install \
 		bison \
 		curl \
 		gawk \
@@ -28,8 +28,14 @@ function install
 		zip \
 		-y
 
+	sudo apt -y --fix-broken install
+
+	# Flatpak
+	sudo apt install flatpak
+
+	# Snap
+	sudo rm -f /etc/apt/preferences.d/nosnap.pref
 	sudo apt install snapd
-	sudo snap install core
 
 	# Personal
 	install_fspop

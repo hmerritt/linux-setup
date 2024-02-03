@@ -114,3 +114,12 @@ function fetch_install_binary
     sudo chmod +x "${filename}"
     sudo mv -f "${filename}" "${dir_local_bin}/${binname}"
 }
+
+function flatpakget
+{
+    setenv
+    local -r appname="${1}"
+    local -r appuri="${2}"
+
+    flatpak install flathub "${appuri}"
+}

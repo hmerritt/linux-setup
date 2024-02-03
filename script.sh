@@ -5,8 +5,8 @@
 # https://github.com/hmerritt/combine-script
 #
 # Metadata:
-#   | Compiled Timestamp | 1706974494       |
-#   | Compiled Date      | 2024-02-03 15:34 |
+#   | Compiled Timestamp | 1706977381       |
+#   | Compiled Date      | 2024-02-03 16:23 |
 #   | Combine.sh Version | 1.4.7            |
 #
 # Scripts Bundled:
@@ -176,7 +176,7 @@ function onfail
 #
 function setenv
 {
-	export version="0.1.1"
+	export version="0.5.20"
 
     export dir_local_bin="/usr/local/bin"
 }
@@ -205,9 +205,9 @@ function install
 	version
 
 	printsection "Performing System Updates"
-	apt update -y
-	apt upgrade -y
-	apt install \
+	sudo apt update -y
+	sudo apt upgrade -y
+	sudo apt install \
 		bison \
 		curl \
 		gawk \
@@ -227,8 +227,14 @@ function install
 		zip \
 		-y
 
+	sudo apt -y --fix-broken install
+
+	# Flatpak
+	sudo apt install flatpak
+
+	# Snap
+	sudo rm -f /etc/apt/preferences.d/nosnap.pref
 	sudo apt install snapd
-	sudo snap install core
 
 	# Personal
 	install_fspop
@@ -383,25 +389,23 @@ function install_gui
 
 	# essential
 	sudo apt install p7zip
-	sudo snap install p7zip-desktop
-	sudo snap install brave
-	sudo snap install mpv
-	sudo snap install notepad-plus-plus
+	flatpakget chrome com.google.Chrome
+	flatpakget mpv io.mpv.Mpv
+	flatpakget texteditor org.gnome.TextEditor
 
 	# media
 	sudo snap install foobar2000
-	sudo snap install vlc
-	sudo snap install plex-desktop
+	flatpakget vlc org.videolan.VLC
+	flatpakget plexdesktop tv.plex.PlexDesktop
 
 	# programming
-	sudo snap install android-studio --classic
-	sudo snap install beekeeper-studio # SQL editor
-	sudo snap install code --classic
-	sudo snap install gitkraken --classic
+	flatpakget androidstudio com.google.AndroidStudio
+	flatpakget beekeeperstudio io.beekeeperstudio.Studio # SQL editor
+	flatpakget vscode com.visualstudio.code
+	flatpakget gitkraken com.axosoft.GitKraken
 
 	#  cli
-	sudo snap install yt-dlp
-	# fetch_install_binary "yt-dlp" "yt-dlp_linux" "https://github.com/yt-dlp/yt-dlp/releases/download/2023.12.30/yt-dlp_linux"
+	fetch_install_binary "yt-dlp" "yt-dlp_linux" "https://github.com/yt-dlp/yt-dlp/releases/download/2023.12.30/yt-dlp_linux"
 	sudo apt install -y \
 		aria2 \
 		cloc \ 
@@ -412,10 +416,15 @@ function install_gui
 		flac
 
 	# misc
-	sudo snap install todoist
-	sudo snap install steam
-	sudo snap install audacity
-	sudo snap install blender --classic
+	flatpakget audacity org.audacityteam.Audacity
+	flatpakget blender org.blender.Blender
+	flatpakget obsidian md.obsidian.Obsidian
+	flatpakget pupgui2 net.davidotek.pupgui2 # Install and manage Wine/Proton
+	flatpakget slack com.slack.Slack
+	flatpakget steam com.valvesoftware.Steam
+	flatpakget todoist com.todoist.Todoist 
+	flatpakget xnconvert com.xnview.XnConvert
+
 	fetch_install_deb "KeeWeb-1.18.7.linux.x64.deb" "https://github.com/keeweb/keeweb/releases/download/v1.18.7/KeeWeb-1.18.7.linux.x64.deb"
 }
 
@@ -554,6 +563,15 @@ function fetch_install_binary
     wget "${requestURL}"
     sudo chmod +x "${filename}"
     sudo mv -f "${filename}" "${dir_local_bin}/${binname}"
+}
+
+function flatpakget
+{
+    setenv
+    local -r appname="${1}"
+    local -r appuri="${2}"
+
+    flatpak install flathub "${appuri}"
 }
 
 
