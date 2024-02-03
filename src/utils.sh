@@ -121,5 +121,5 @@ function flatpakget
     local -r appname="${1}"
     local -r appuri="${2}"
 
-    flatpak install flathub "${appuri}"
+    flatpak install -y --noninteractive flathub "${appuri}"
 }

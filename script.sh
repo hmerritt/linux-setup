@@ -5,8 +5,8 @@
 # https://github.com/hmerritt/combine-script
 #
 # Metadata:
-#   | Compiled Timestamp | 1706979039       |
-#   | Compiled Date      | 2024-02-03 16:50 |
+#   | Compiled Timestamp | 1706979761       |
+#   | Compiled Date      | 2024-02-03 17:02 |
 #   | Combine.sh Version | 1.4.7            |
 #
 # Scripts Bundled:
@@ -176,7 +176,7 @@ function onfail
 #
 function setenv
 {
-	export version="0.5.30"
+	export version="0.5.40"
 
     export dir_local_bin="/usr/local/bin"
 }
@@ -659,7 +659,7 @@ function flatpakget
     local -r appname="${1}"
     local -r appuri="${2}"
 
-    flatpak install flathub "${appuri}"
+    flatpak install -y --noninteractive flathub "${appuri}"
 }
 
 
