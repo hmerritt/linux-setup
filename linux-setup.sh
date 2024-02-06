@@ -5,8 +5,8 @@
 # https://github.com/hmerritt/combine-script
 #
 # Metadata:
-#   | Compiled Timestamp | 1707261359       |
-#   | Compiled Date      | 2024-02-06 23:15 |
+#   | Compiled Timestamp | 1707262836       |
+#   | Compiled Date      | 2024-02-06 23:40 |
 #   | Combine.sh Version | 1.4.7            |
 #
 # Scripts Bundled:
@@ -176,7 +176,7 @@ function onfail
 #
 function setenv
 {
-	export version="0.7.80"
+	export version="0.7.20"
 
     export dir_local_bin="/usr/local/bin"
 }
@@ -223,7 +223,6 @@ function install
 		htop \
 		imagemagick \
 		inkscape \
-		libfontconfigl-dev \
 		libglib2.0-dev-bin \
 		lsb-release \
 		make \
@@ -466,9 +465,9 @@ function install_gui
 	# Misc
 	sudo flatpak override --filesystem=xdg-config/gtk-4.0
 	# GNOME Shell extensions
-	# user-themes - https://extensions.gnome.org/extension/19/user-themes/
-	# dash-to-dock - https://extensions.gnome.org/extension/307/dash-to-dock/
-	# blur-my-shell - https://extensions.gnome.org/extension/3193/blur-my-shell/
+	xdg-open https://extensions.gnome.org/extension/19/user-themes/     # user-themes
+	xdg-open https://extensions.gnome.org/extension/307/dash-to-dock/   # dash-to-dock
+	xdg-open https://extensions.gnome.org/extension/3193/blur-my-shell/ # blur-my-shell
 }
 
 

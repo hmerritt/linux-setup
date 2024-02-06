@@ -24,7 +24,6 @@ function install
 		htop \
 		imagemagick \
 		inkscape \
-		libfontconfigl-dev \
 		libglib2.0-dev-bin \
 		lsb-release \
 		make \
