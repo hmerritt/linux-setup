@@ -71,7 +71,7 @@ function install_gui
 	# Misc
 	sudo flatpak override --filesystem=xdg-config/gtk-4.0
 	# GNOME Shell extensions
-	# user-themes - https://extensions.gnome.org/extension/19/user-themes/
-	# dash-to-dock - https://extensions.gnome.org/extension/307/dash-to-dock/
-	# blur-my-shell - https://extensions.gnome.org/extension/3193/blur-my-shell/
+	xdg-open https://extensions.gnome.org/extension/19/user-themes/     # user-themes
+	xdg-open https://extensions.gnome.org/extension/307/dash-to-dock/   # dash-to-dock
+	xdg-open https://extensions.gnome.org/extension/3193/blur-my-shell/ # blur-my-shell
 }
