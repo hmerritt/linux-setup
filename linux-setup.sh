@@ -5,8 +5,8 @@
 # https://github.com/hmerritt/combine-script
 #
 # Metadata:
-#   | Compiled Timestamp | 1707259686       |
-#   | Compiled Date      | 2024-02-06 22:48 |
+#   | Compiled Timestamp | 1707261359       |
+#   | Compiled Date      | 2024-02-06 23:15 |
 #   | Combine.sh Version | 1.4.7            |
 #
 # Scripts Bundled:
@@ -176,7 +176,7 @@ function onfail
 #
 function setenv
 {
-	export version="0.6.80"
+	export version="0.7.80"
 
     export dir_local_bin="/usr/local/bin"
 }
@@ -207,10 +207,12 @@ function install
 	printsection "Performing System Updates"
 	sudo apt update -y
 	sudo apt upgrade -y
+	sudo apt -y --fix-broken install
 	sudo apt install -y \
 		bison \
 		cmake \
 		curl \
+		dialog \
 		fontconfig \
 		g++ \
 		gawk \
@@ -219,13 +221,18 @@ function install
 		git \
 		gpg \
 		htop \
+		imagemagick \
+		inkscape \
 		libfontconfigl-dev \
+		libglib2.0-dev-bin \
 		lsb-release \
 		make \
 		make \
 		net-tools \
+		optipng \
 		pkg-config \
 		rsync \
+		sassc \
 		software-properties-common \
 		tar \
 		unzip \
@@ -438,6 +445,30 @@ function install_gui
 	fetch_install_binary "rio" "rio" "https://raw.githubusercontent.com/hmerritt/linux-bucket/master/bucket/rio/rio" # terminal
 	curl "https://raw.githubusercontent.com/hmerritt/linux-bucket/master/bucket/rio/config.toml" -o config.toml
 	mv -f config.toml ~/.config/rio/config.toml
+
+	# MacOS Big Sur like theme https://github.com/vinceliuice/WhiteSur-gtk-theme
+	git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1 && cd WhiteSur-gtk-theme
+	./install.sh -l
+	./tweaks.sh -F
+	./tweaks.sh -f
+	sudo ./tweaks.sh -g
+	cd ../
+	# Wallpaper
+	git clone https://github.com/vinceliuice/WhiteSur-wallpapers && cd WhiteSur-wallpapers
+	sudo ./install-gnome-backgrounds.sh
+	cd ../
+	# Icons
+	git clone https://github.com/vinceliuice/WhiteSur-icon-theme && WhiteSur-icon-theme
+	./install.sh
+	cd ../
+	# Cleanup
+	# rm -rf WhiteSur-gtk-theme WhiteSur-wallpapers WhiteSur-icon-theme
+	# Misc
+	sudo flatpak override --filesystem=xdg-config/gtk-4.0
+	# GNOME Shell extensions
+	# user-themes - https://extensions.gnome.org/extension/19/user-themes/
+	# dash-to-dock - https://extensions.gnome.org/extension/307/dash-to-dock/
+	# blur-my-shell - https://extensions.gnome.org/extension/3193/blur-my-shell/
 }
 
 

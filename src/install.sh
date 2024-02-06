@@ -8,10 +8,12 @@ function install
 	printsection "Performing System Updates"
 	sudo apt update -y
 	sudo apt upgrade -y
+	sudo apt -y --fix-broken install
 	sudo apt install -y \
 		bison \
 		cmake \
 		curl \
+		dialog \
 		fontconfig \
 		g++ \
 		gawk \
@@ -20,13 +22,18 @@ function install
 		git \
 		gpg \
 		htop \
+		imagemagick \
+		inkscape \
 		libfontconfigl-dev \
+		libglib2.0-dev-bin \
 		lsb-release \
 		make \
 		make \
 		net-tools \
+		optipng \
 		pkg-config \
 		rsync \
+		sassc \
 		software-properties-common \
 		tar \
 		unzip \

@@ -50,4 +50,28 @@ function install_gui
 	fetch_install_binary "rio" "rio" "https://raw.githubusercontent.com/hmerritt/linux-bucket/master/bucket/rio/rio" # terminal
 	curl "https://raw.githubusercontent.com/hmerritt/linux-bucket/master/bucket/rio/config.toml" -o config.toml
 	mv -f config.toml ~/.config/rio/config.toml
+
+	# MacOS Big Sur like theme https://github.com/vinceliuice/WhiteSur-gtk-theme
+	git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1 && cd WhiteSur-gtk-theme
+	./install.sh -l
+	./tweaks.sh -F
+	./tweaks.sh -f
+	sudo ./tweaks.sh -g
+	cd ../
+	# Wallpaper
+	git clone https://github.com/vinceliuice/WhiteSur-wallpapers && cd WhiteSur-wallpapers
+	sudo ./install-gnome-backgrounds.sh
+	cd ../
+	# Icons
+	git clone https://github.com/vinceliuice/WhiteSur-icon-theme && WhiteSur-icon-theme
+	./install.sh
+	cd ../
+	# Cleanup
+	# rm -rf WhiteSur-gtk-theme WhiteSur-wallpapers WhiteSur-icon-theme
+	# Misc
+	sudo flatpak override --filesystem=xdg-config/gtk-4.0
+	# GNOME Shell extensions
+	# user-themes - https://extensions.gnome.org/extension/19/user-themes/
+	# dash-to-dock - https://extensions.gnome.org/extension/307/dash-to-dock/
+	# blur-my-shell - https://extensions.gnome.org/extension/3193/blur-my-shell/
 }
