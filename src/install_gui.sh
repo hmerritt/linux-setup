@@ -51,11 +51,19 @@ function install_gui
 	curl "https://raw.githubusercontent.com/hmerritt/linux-bucket/master/bucket/rio/config.toml" -o config.toml
 	mv -f config.toml ~/.config/rio/config.toml
 
+	install_gui_macos_theme
+}
+
+function install_gui_macos_theme
+{
+	setenv
+
 	# MacOS Big Sur like theme https://github.com/vinceliuice/WhiteSur-gtk-theme
+	cd ~
 	git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1 && cd WhiteSur-gtk-theme
-	./install.sh -l
-	./tweaks.sh -F
-	./tweaks.sh -f
+	sudo ./install.sh -l
+	sudo ./tweaks.sh -F
+	sudo ./tweaks.sh -f
 	sudo ./tweaks.sh -g
 	cd ../
 	# Wallpaper
@@ -63,8 +71,8 @@ function install_gui
 	sudo ./install-gnome-backgrounds.sh
 	cd ../
 	# Icons
-	git clone https://github.com/vinceliuice/WhiteSur-icon-theme && WhiteSur-icon-theme
-	./install.sh
+	git clone https://github.com/vinceliuice/WhiteSur-icon-theme && cd WhiteSur-icon-theme
+	sudo ./install.sh
 	cd ../
 	# Cleanup
 	# rm -rf WhiteSur-gtk-theme WhiteSur-wallpapers WhiteSur-icon-theme
