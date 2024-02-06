@@ -5,7 +5,7 @@
 #
 function setenv
 {
-	export version="0.5.40"
+	export version="0.6.80"
 
     export dir_local_bin="/usr/local/bin"
 }

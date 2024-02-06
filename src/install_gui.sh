@@ -28,14 +28,9 @@ function install_gui
 
 	#  cli
 	fetch_install_binary "yt-dlp" "yt-dlp_linux" "https://github.com/yt-dlp/yt-dlp/releases/download/2023.12.30/yt-dlp_linux"
-	sudo apt install -y \
-		aria2 \
-		cloc \ 
-		composer \ 
-		ffmpeg \
-		git \ 
-		mediainfo \
-		flac
+	symlink_localbin "yt-dlp" "youtube-dl"
+	symlink_localbin "yt-dlp" "yt"
+	sudo apt install -y aria2 cloc composer ffmpeg git mediainfo flac
 
 	# misc
 	flatpakget audacity org.audacityteam.Audacity
@@ -48,5 +43,11 @@ function install_gui
 	flatpakget todoist com.todoist.Todoist 
 	flatpakget xnconvert com.xnview.XnConvert
 
-	fetch_install_deb "KeeWeb-1.18.7.linux.x64.deb" "https://github.com/keeweb/keeweb/releases/download/v1.18.7/KeeWeb-1.18.7.linux.x64.deb"
+	# @note this doesn't work
+	# fetch_install_deb "KeeWeb-1.18.7.linux.x64.deb" "https://github.com/keeweb/keeweb/releases/download/v1.18.7/KeeWeb-1.18.7.linux.x64.deb"
+
+	# rio
+	fetch_install_binary "rio" "rio" "https://raw.githubusercontent.com/hmerritt/linux-bucket/master/bucket/rio/rio" # terminal
+	curl "https://raw.githubusercontent.com/hmerritt/linux-bucket/master/bucket/rio/config.toml" -o config.toml
+	mv -f config.toml ~/.config/rio/config.toml
 }

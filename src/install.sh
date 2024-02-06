@@ -8,30 +8,36 @@ function install
 	printsection "Performing System Updates"
 	sudo apt update -y
 	sudo apt upgrade -y
-	sudo apt install \
+	sudo apt install -y \
 		bison \
+		cmake \
 		curl \
+		fontconfig \
+		g++ \
 		gawk \
+		gcc \
 		gcc \
 		git \
 		gpg \
 		htop \
-		libncurses5 \
+		libfontconfigl-dev \
 		lsb-release \
 		make \
+		make \
 		net-tools \
+		pkg-config \
 		rsync \
 		software-properties-common \
 		tar \
 		unzip \
 		wget \
-		zip \
-		-y
+		zip
 
 	sudo apt -y --fix-broken install
 
 	# Flatpak
 	sudo apt install flatpak
+	sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 	# Snap
 	sudo rm -f /etc/apt/preferences.d/nosnap.pref

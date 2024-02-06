@@ -94,6 +94,22 @@ function wait_for_response
     done
 }
 
+function symlink
+{
+    local -r fileToLink="${1}"
+    local -r symlinkFile="${2}"
+
+    sudo ln -s "${fileToLink}" "${symlinkFile}"
+}
+
+function symlink_localbin
+{
+    local -r fileToLink="${1}"
+    local -r symlinkFile="${2}"
+
+    symlink "${dir_local_bin}/${fileToLink}" "${dir_local_bin}/${symlinkFile}"
+}
+
 function fetch_install_deb
 {
     local -r filename="${1}"

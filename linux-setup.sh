@@ -5,8 +5,8 @@
 # https://github.com/hmerritt/combine-script
 #
 # Metadata:
-#   | Compiled Timestamp | 1706979761       |
-#   | Compiled Date      | 2024-02-03 17:02 |
+#   | Compiled Timestamp | 1707259686       |
+#   | Compiled Date      | 2024-02-06 22:48 |
 #   | Combine.sh Version | 1.4.7            |
 #
 # Scripts Bundled:
@@ -176,7 +176,7 @@ function onfail
 #
 function setenv
 {
-	export version="0.5.40"
+	export version="0.6.80"
 
     export dir_local_bin="/usr/local/bin"
 }
@@ -207,30 +207,36 @@ function install
 	printsection "Performing System Updates"
 	sudo apt update -y
 	sudo apt upgrade -y
-	sudo apt install \
+	sudo apt install -y \
 		bison \
+		cmake \
 		curl \
+		fontconfig \
+		g++ \
 		gawk \
+		gcc \
 		gcc \
 		git \
 		gpg \
 		htop \
-		libncurses5 \
+		libfontconfigl-dev \
 		lsb-release \
 		make \
+		make \
 		net-tools \
+		pkg-config \
 		rsync \
 		software-properties-common \
 		tar \
 		unzip \
 		wget \
-		zip \
-		-y
+		zip
 
 	sudo apt -y --fix-broken install
 
 	# Flatpak
 	sudo apt install flatpak
+	sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 	# Snap
 	sudo rm -f /etc/apt/preferences.d/nosnap.pref
@@ -410,14 +416,9 @@ function install_gui
 
 	#  cli
 	fetch_install_binary "yt-dlp" "yt-dlp_linux" "https://github.com/yt-dlp/yt-dlp/releases/download/2023.12.30/yt-dlp_linux"
-	sudo apt install -y \
-		aria2 \
-		cloc \ 
-		composer \ 
-		ffmpeg \
-		git \ 
-		mediainfo \
-		flac
+	symlink_localbin "yt-dlp" "youtube-dl"
+	symlink_localbin "yt-dlp" "yt"
+	sudo apt install -y aria2 cloc composer ffmpeg git mediainfo flac
 
 	# misc
 	flatpakget audacity org.audacityteam.Audacity
@@ -430,7 +431,13 @@ function install_gui
 	flatpakget todoist com.todoist.Todoist 
 	flatpakget xnconvert com.xnview.XnConvert
 
-	fetch_install_deb "KeeWeb-1.18.7.linux.x64.deb" "https://github.com/keeweb/keeweb/releases/download/v1.18.7/KeeWeb-1.18.7.linux.x64.deb"
+	# @note this doesn't work
+	# fetch_install_deb "KeeWeb-1.18.7.linux.x64.deb" "https://github.com/keeweb/keeweb/releases/download/v1.18.7/KeeWeb-1.18.7.linux.x64.deb"
+
+	# rio
+	fetch_install_binary "rio" "rio" "https://raw.githubusercontent.com/hmerritt/linux-bucket/master/bucket/rio/rio" # terminal
+	curl "https://raw.githubusercontent.com/hmerritt/linux-bucket/master/bucket/rio/config.toml" -o config.toml
+	mv -f config.toml ~/.config/rio/config.toml
 }
 
 
@@ -630,6 +637,22 @@ function wait_for_response
         curl -sL ${requestURL} | grep -q "${requestResponse}" && break
         sleep 1
     done
+}
+
+function symlink
+{
+    local -r fileToLink="${1}"
+    local -r symlinkFile="${2}"
+
+    sudo ln -s "${fileToLink}" "${symlinkFile}"
+}
+
+function symlink_localbin
+{
+    local -r fileToLink="${1}"
+    local -r symlinkFile="${2}"
+
+    symlink "${dir_local_bin}/${fileToLink}" "${dir_local_bin}/${symlinkFile}"
 }
 
 function fetch_install_deb
