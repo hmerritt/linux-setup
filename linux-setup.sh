@@ -5,8 +5,8 @@
 # https://github.com/hmerritt/combine-script
 #
 # Metadata:
-#   | Compiled Timestamp | 1707263602       |
-#   | Compiled Date      | 2024-02-06 23:53 |
+#   | Compiled Timestamp | 1707264242       |
+#   | Compiled Date      | 2024-02-07 00:04 |
 #   | Combine.sh Version | 1.4.7            |
 #
 # Scripts Bundled:
@@ -176,7 +176,7 @@ function onfail
 #
 function setenv
 {
-	export version="0.7.22"
+	export version="0.7.24"
 
     export dir_local_bin="/usr/local/bin"
 }
@@ -219,6 +219,7 @@ function install
 		gcc \
 		gcc \
 		git \
+		gnome-shell-extensions \
 		gpg \
 		htop \
 		imagemagick \

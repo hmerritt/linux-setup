@@ -61,7 +61,7 @@ function install_gui_macos_theme
 	# MacOS Big Sur like theme https://github.com/vinceliuice/WhiteSur-gtk-theme
 	cd ~
 	git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1 && cd WhiteSur-gtk-theme
-	sudo ./install.sh -l
+	./install.sh -l
 	sudo ./tweaks.sh -F
 	sudo ./tweaks.sh -f
 	sudo ./tweaks.sh -g

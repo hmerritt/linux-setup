@@ -20,6 +20,7 @@ function install
 		gcc \
 		gcc \
 		git \
+		gnome-shell-extensions \
 		gpg \
 		htop \
 		imagemagick \
